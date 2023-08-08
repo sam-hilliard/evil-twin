@@ -10,14 +10,6 @@ networkPrefix="192.168.1"
 
 printf "Using interface: $interface\n"
 
-# making sure device exists
-ifconfig $interface > /dev/null 2>&1
-if [ $? -ne 0 ]; then
-	printf "Error: Interface $interface does not exist.\n"
-	printf "Exiting...\n"
-	exit 1
-fi
-
 # writing configuration file for dnsmasq	
 printf "Configuring dnsmasq...\n"
 echo "interface=$interface
@@ -48,7 +40,7 @@ sudo route add -net "$networkPrefix.0" netmask 255.255.255.0 gw "$networkPrefix.
 
 # running dnsmasq in the background
 printf "Starting dnsmasq...\n"
-sudo kill $(sudo lsof -i:53 -t) && sudo dnsmasq -C dnsmasq.conf &
+sudo dnsmasq -C dnsmasq.conf
 
 # running hostapd
 printf "Starting hostapd...\n"
